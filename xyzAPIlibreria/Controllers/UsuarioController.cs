@@ -16,14 +16,14 @@ using System.Threading.Tasks;
 using xyzAPIlibreria.Models;
 
 namespace xyzAPIlibreria.Controllers
-{   [ApiController]
+{
+    [ApiController]
     [Route("api/[controller]")]
-
-    public class AutorController : Controller
+    public class UsuarioController : Controller
     {
         private readonly IConfiguration _configuration;
 
-        public AutorController(IConfiguration configuration)
+        public UsuarioController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -31,7 +31,7 @@ namespace xyzAPIlibreria.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            string query = @"select * from Autor";
+            string query = @"select * from Usuario";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("sql10436778");
@@ -49,10 +49,10 @@ namespace xyzAPIlibreria.Controllers
             }
             return new JsonResult(table);
         }
-        [HttpGet("{Id_Autor}")]
-        public JsonResult Get(int Id_Autor)
+        [HttpGet("{Id_Usuario}")]
+        public JsonResult Get(int Id_Usuario)
         {
-            string query = @"select * from Autor Where Id_Autor = @Id_Autor";
+            string query = @"select * from Usuario Where Id_Usuario = @Id_Usuario";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("sql10436778");
@@ -62,7 +62,7 @@ namespace xyzAPIlibreria.Controllers
                 mycon.Open();
                 using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
                 {
-                    myCommand.Parameters.AddWithValue("@Id_Autor", Id_Autor);
+                    myCommand.Parameters.AddWithValue("@Id_Usuario", Id_Usuario);
 
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
@@ -74,10 +74,10 @@ namespace xyzAPIlibreria.Controllers
             return new JsonResult(table);
         }
         [HttpPost]
-        public JsonResult Post(Autor autor)
+        public JsonResult Post(Usuario usuario)
         {
-            string query = @"Insert into Autor (Nombres, Apellidos, FechaNacimiento) 
-                values (@Nombres, @Apellidos, @FechaNacimiento);";
+            string query = @"Insert into Usuario (Nombres, Apellidos, Email, Password, Id_Rol) 
+                values (@Nombres, @Apellidos, @Email, @Password, @Id_Rol);";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("sql10436778");
@@ -87,9 +87,11 @@ namespace xyzAPIlibreria.Controllers
                 mycon.Open();
                 using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
                 {
-                    myCommand.Parameters.AddWithValue("@Nombres", autor.Nombres);
-                    myCommand.Parameters.AddWithValue("@Apellidos", autor.Apellidos);
-                    myCommand.Parameters.AddWithValue("@FechaNacimiento", autor.FechaNacimiento);
+                    myCommand.Parameters.AddWithValue("@Nombres", usuario.Nombres);
+                    myCommand.Parameters.AddWithValue("@Apellidos", usuario.Apellidos);
+                    myCommand.Parameters.AddWithValue("@Email", usuario.Email);
+                    myCommand.Parameters.AddWithValue("@Password", usuario.Password);
+                    myCommand.Parameters.AddWithValue("@Id_Rol", usuario.Id_Rol);
 
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
@@ -100,9 +102,9 @@ namespace xyzAPIlibreria.Controllers
             return new JsonResult("Added Successfully");
         }
         [HttpPut]
-        public JsonResult Put(Autor autor)
+        public JsonResult Put(Usuario usuario)
         {
-            string query = @"Update Autor set  Nombres = @Nombres, Apellidos= @Apellidos, FechaNacimiento =  @FechaNacimiento Where Id_Autor = @Id_Autor;";
+            string query = @"Update Usuario set Id_Usuario = @Id_Usuario, Nombres = @Nombres, Apellidos= @Apellidos, Email= @Email, Password=@Password, Id_Rol= @Id_Rol Where Id_Autor = @Id_Autor;";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("sql10436778");
@@ -112,10 +114,12 @@ namespace xyzAPIlibreria.Controllers
                 mycon.Open();
                 using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
                 {
-                    myCommand.Parameters.AddWithValue("@Id_Autor", autor.Id_Autor);
-                    myCommand.Parameters.AddWithValue("@Nombres", autor.Nombres);
-                    myCommand.Parameters.AddWithValue("@Apellidos", autor.Apellidos);
-                    myCommand.Parameters.AddWithValue("@FechaNacimiento", autor.FechaNacimiento);
+                    myCommand.Parameters.AddWithValue("@Id_Usuario", usuario.Id_Usuario);
+                    myCommand.Parameters.AddWithValue("@Nombres", usuario.Nombres);
+                    myCommand.Parameters.AddWithValue("@Apellidos", usuario.Apellidos);
+                    myCommand.Parameters.AddWithValue("@Email", usuario.Email);
+                    myCommand.Parameters.AddWithValue("@Password", usuario.Password);
+                    myCommand.Parameters.AddWithValue("@Id_Rol", usuario.Id_Rol);
 
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
@@ -126,10 +130,10 @@ namespace xyzAPIlibreria.Controllers
             }
             return new JsonResult("Updated Successfully");
         }
-        [HttpDelete("{Id_Autor}")]
-        public JsonResult Delete(int Id_Autor)
+        [HttpDelete("{Id_Usuario}")]
+        public JsonResult Delete(int Id_Usuario)
         {
-            string query = @"Delete * from Autor Where Id_Autor = @Id_Autor;";
+            string query = @"Delete from Usuario Where Id_Usuario = @Id_Usuario;";
 
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("sql10436778");
@@ -139,7 +143,7 @@ namespace xyzAPIlibreria.Controllers
                 mycon.Open();
                 using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
                 {
-                    myCommand.Parameters.AddWithValue("@Id_Autor", Id_Autor);
+                    myCommand.Parameters.AddWithValue("@Id_Usuario", Id_Usuario);
 
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);

@@ -13,6 +13,6 @@ namespace xyzAPIlibreria.Models
         public string Apellidos { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public int Rol { get; set; }
+        public int Id_Rol { get; set; }
     }
 }

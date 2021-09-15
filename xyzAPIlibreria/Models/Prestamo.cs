@@ -11,7 +11,7 @@ namespace xyzAPIlibreria.Models
 
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
-        public int Libro { get; set; }
-        public int Usuario { get; set; }
+        public int Id_Libro { get; set; }
+        public int Id_Usuario { get; set; }
     }
 }

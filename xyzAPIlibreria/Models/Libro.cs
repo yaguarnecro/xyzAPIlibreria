@@ -10,11 +10,11 @@ namespace xyzAPIlibreria.Models
         public int Id_Libro { get; set; }
 
         public string Titulo { get; set; }
-        public bool Disponible { get; set; }
+        public int Disponible { get; set; }
 
-        public DateTime FechaPublicación { get; set; }
-        public int Ubicacion { get; set; }
-        public int Autor { get; set; }
+        public DateTime FechaPublicacion { get; set; }
+        public int Id_Ubicacion { get; set; }
+        public int Id_Autor { get; set; }
 
     }
 }
