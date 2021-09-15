@@ -14,6 +14,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using xyzAPIlibreria.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace xyzAPIlibreria.Controllers
 {

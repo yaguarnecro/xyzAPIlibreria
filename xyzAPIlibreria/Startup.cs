@@ -11,8 +11,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
-
-
+using xyzAPIlibreria.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using xyzAPIlibreria.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace xyzAPIlibreria
 {
@@ -29,6 +34,15 @@ namespace xyzAPIlibreria
         public void ConfigureServices(IServiceCollection services)
         {
             {
+                //JwtConfig
+                services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+
+                //DATABASECONTEXT!!!????
+                services.AddDbContext<ApiDbContext>(options =>
+                options.UseMySQL(
+                    Configuration.GetConnectionString("sql10436778")
+                    )) ;
+
                 //Enable CORS
                 services.AddCors(c =>
                 {
@@ -41,7 +55,30 @@ namespace xyzAPIlibreria
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                     .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
                     = new DefaultContractResolver());
+                //AuthOptions
+                services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                    .AddJwtBearer(jwt => {
+                        var Key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
 
+                        jwt.SaveToken = true;
+                        jwt.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Key),
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            RequireExpirationTime = false
+                        };
+                        });
+
+                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApiDbContext>();
 
                 services.AddControllers();
 
@@ -66,6 +103,8 @@ namespace xyzAPIlibreria
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -14,6 +14,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using xyzAPIlibreria.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace xyzAPIlibreria.Controllers
 {
@@ -74,6 +76,7 @@ namespace xyzAPIlibreria.Controllers
             return new JsonResult(table);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public JsonResult Post(Libro libro)
         {
             string query = @"Insert into Libro (Titulo, Disponible, FechaPublicacion, Id_Ubicacíon, Id_Autor) 
