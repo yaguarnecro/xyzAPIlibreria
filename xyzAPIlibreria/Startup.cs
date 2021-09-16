@@ -18,6 +18,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using xyzAPIlibreria.Data;
 using Microsoft.EntityFrameworkCore;
+using xyzAPIlibreria.IService;
+using xyzAPIlibreria.Service;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc.Versioning.Conventions;
 
 namespace xyzAPIlibreria
 {
@@ -41,7 +45,7 @@ namespace xyzAPIlibreria
                 services.AddDbContext<ApiDbContext>(options =>
                 options.UseMySQL(
                     Configuration.GetConnectionString("sql10436778")
-                    )) ;
+                    ));
 
                 //Enable CORS
                 services.AddCors(c =>
@@ -55,6 +59,7 @@ namespace xyzAPIlibreria
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                     .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
                     = new DefaultContractResolver());
+                
                 //AuthOptions
                 services.AddAuthentication(options =>
                 {
@@ -62,7 +67,8 @@ namespace xyzAPIlibreria
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                    .AddJwtBearer(jwt => {
+                    .AddJwtBearer(jwt =>
+                    {
                         var Key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
 
                         jwt.SaveToken = true;
@@ -75,18 +81,69 @@ namespace xyzAPIlibreria
                             ValidateLifetime = true,
                             RequireExpirationTime = false
                         };
-                        });
+                    });
 
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApiDbContext>();
 
                 services.AddControllers();
 
+                services.AddScoped<IUserService, UserService>();
+
+                services.AddVersionedApiExplorer(c =>
+                {
+                    c.GroupNameFormat = "'v'VVV";
+                    c.SubstituteApiVersionInUrl = true;
+                    c.AssumeDefaultVersionWhenUnspecified = true;
+                    c.DefaultApiVersion = new ApiVersion(1, 0);
+
+                });
+
+                services.AddApiVersioning(c =>
+                {
+                    c.ReportApiVersions = true;
+                    c.AssumeDefaultVersionWhenUnspecified = true;
+                    c.DefaultApiVersion = new ApiVersion(1, 0);
+                });
+
                 services.AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "xyzAPIlibreria", Version = "v1" });
+                    
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "xyzAPIlibreria", Version = "v1", Description = "RestApiCrud para gestion de libreria" });
+                    c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+                    {
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "basic",
+                        In = ParameterLocation.Header,
+                        Description = "Basic Auth Header"
+                    });
+
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "basic"
+                            }
+                        },
+                        new string[]{}
+                    }
+
                 });
+                });
+
+                services.AddAuthentication("BasicAuthentication")
+                    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+                
+                services.AddRouting();
+
             }
+
+            
+                
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -102,7 +159,15 @@ namespace xyzAPIlibreria
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "xyzAPIlibreria v1"));
             }
 
+            app.UseHttpsRedirection();
+            app.UseSwagger();
+            app.UseSwaggerUI(c=>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TestService");
+            });
             app.UseRouting();
+
+            app.UseStaticFiles();
 
             app.UseAuthentication();
 

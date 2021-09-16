@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "BpokIF72pqg404LZe48CeXxsqzI9kJBq/L3x6rWj7XaZdPdYZSlMkZjQMikHLJtM/sGvE3jD2CoelXy6WMNiAQ==",
+  "dgSpecHash": "fVsygacQHXF3rtct6d1leWoh73c5GOR/SE1nMPFsw+vI35yDSk9sTaIp0kYOW7t7OAJiTp4/ZM3inTLUFXbVJg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Arturo Araque\\source\\repos\\xyzAPIlibreria\\xyzAPIlibreria\\xyzAPIlibreria.csproj",
   "expectedPackageFiles": [
@@ -15,8 +15,10 @@
     "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\5.0.10\\microsoft.aspnetcore.cryptography.keyderivation.5.0.10.nupkg.sha512",
     "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\5.0.10\\microsoft.aspnetcore.identity.entityframeworkcore.5.0.10.nupkg.sha512",
     "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\5.0.10\\microsoft.aspnetcore.identity.ui.5.0.10.nupkg.sha512",
-    "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.9\\microsoft.aspnetcore.jsonpatch.5.0.9.nupkg.sha512",
-    "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\5.0.9\\microsoft.aspnetcore.mvc.newtonsoftjson.5.0.9.nupkg.sha512",
+    "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\5.0.10\\microsoft.aspnetcore.jsonpatch.5.0.10.nupkg.sha512",
+    "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\5.0.10\\microsoft.aspnetcore.mvc.newtonsoftjson.5.0.10.nupkg.sha512",
+    "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning\\5.0.0\\microsoft.aspnetcore.mvc.versioning.5.0.0.nupkg.sha512",
+    "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning.apiexplorer\\5.0.0\\microsoft.aspnetcore.mvc.versioning.apiexplorer.5.0.0.nupkg.sha512",
     "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.10\\microsoft.entityframeworkcore.5.0.10.nupkg.sha512",
     "C:\\Users\\Arturo Araque\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\5.0.10\\microsoft.entityframeworkcore.abstractions.5.0.10.nupkg.sha512",

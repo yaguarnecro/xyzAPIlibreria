@@ -21,6 +21,7 @@ namespace xyzAPIlibreria.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsuarioController : Controller
     {
         private readonly IConfiguration _configuration;

@@ -21,6 +21,7 @@ namespace xyzAPIlibreria.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LibroController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -75,8 +76,92 @@ namespace xyzAPIlibreria.Controllers
             }
             return new JsonResult(table);
         }
+
+        [HttpGet("{Autor}")]
+        public JsonResult Get(string Autor)
+        {
+            string query = @"SELECT l.Id_Libro, l.Titulo, l.Disponible, l.FechaPublicion, a.Nombres, a.Apellidos, u.Tematica, u.Id_Ubicacion 
+            FROM Libro AS l 
+            INNER JOIN Autor AS a ON l.Id_Autor = a.Id_Autor 
+            INNER JOIN Ubicacion as u ON l.Id_Ubicacion = u.Id_Ubicacion
+            WHERE CONTAINS (a.Nombres,"+@Autor+");";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("sql10436778");
+            MySqlDataReader myReader;
+            using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+            {
+                mycon.Open();
+                using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+                {
+                    myCommand.Parameters.AddWithValue("@Autor", Autor);
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    mycon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+        [HttpGet("{Tema}")]
+        public JsonResult Get(string Tema)
+        {
+            string query = @"SELECT l.Id_Libro, l.Titulo, l.Disponible, l.FechaPublicion, a.Nombres, a.Apellidos, u.Tematica, u.Id_Ubicacion 
+            FROM Libro AS l 
+            INNER JOIN Autor AS a ON l.Id_Autor = a.Id_Autor 
+            INNER JOIN Ubicacion as u ON l.Id_Ubicacion = u.Id_Ubicacion
+            WHERE CONTAINS (u.Tematica,"+@Tema+");";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("sql10436778");
+            MySqlDataReader myReader;
+            using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+            {
+                mycon.Open();
+                using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+                {
+                    myCommand.Parameters.AddWithValue("@Tema", Tema);
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    mycon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
+        [HttpGet("{Titulo}")]
+        public JsonResult Get(string Titulo)
+        {
+            string query = @"SELECT l.Id_Libro, l.Titulo, l.Disponible, l.FechaPublicion, a.Nombres, a.Apellidos, u.Tematica, u.Id_Ubicacion 
+            FROM Libro AS l 
+            INNER JOIN Autor AS a ON l.Id_Autor = a.Id_Autor 
+            INNER JOIN Ubicacion as u ON l.Id_Ubicacion = u.Id_Ubicacion
+            WHERE CONTAINS (l.Titulo," + @Titulo + ");";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("sql10436778");
+            MySqlDataReader myReader;
+            using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+            {
+                mycon.Open();
+                using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+                {
+                    myCommand.Parameters.AddWithValue("@Titulo", Titulo);
+
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+
+                    myReader.Close();
+                    mycon.Close();
+                }
+            }
+            return new JsonResult(table);
+        }
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public JsonResult Post(Libro libro)
         {
             string query = @"Insert into Libro (Titulo, Disponible, FechaPublicacion, Id_Ubicacíon, Id_Autor) 
